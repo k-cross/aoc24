@@ -8,7 +8,7 @@ enum Level {
 
 fn main() {
     let content =
-        fs::read_to_string("/Users/ken/src/aoc24/aoc2/src/input.csv").expect("file didn't open");
+        fs::read_to_string("/Users/ken/src/aoc24/day2/src/input.csv").expect("file didn't open");
     let mut safe: i32 = 0;
 
     for line in content.trim().lines() {

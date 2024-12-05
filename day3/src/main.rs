@@ -3,7 +3,7 @@ use std::fs;
 
 fn main() {
     let content =
-        fs::read_to_string("/Users/ken/src/aoc24/aoc3/src/input.txt").expect("file didn't open");
+        fs::read_to_string("/Users/ken/src/aoc24/day3/src/input.txt").expect("file didn't open");
     let result = get_enabled(content.as_str());
 
     println!("result: {}", result);

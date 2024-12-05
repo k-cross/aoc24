@@ -3,7 +3,7 @@ use std::fs;
 
 fn main() {
     let content =
-        fs::read_to_string("/Users/ken/src/aoc24/aoc1/src/input.csv").expect("file didn't open");
+        fs::read_to_string("/Users/ken/src/aoc24/day1/src/input.csv").expect("file didn't open");
     let mut left = Vec::new();
     let mut right = Vec::new();
     let mut counts = HashMap::new();
