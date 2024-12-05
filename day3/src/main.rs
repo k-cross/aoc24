@@ -32,20 +32,6 @@ fn get_enabled(content: &str) -> i32 {
     result
 }
 
-//fn split_do(s: &str) -> {
-//    match item.split_once("do()") {
-//        Some((_before, after)) => {
-//            acc.push(after);
-//            acc
-//        }
-//        _ => acc,
-//    }
-//}
-//
-//fn split_dont(s: &str) -> {
-//
-//}
-
 fn perform_calc(split_input: &str) -> i32 {
     let mut result = 0;
     let re = Regex::new(r"^([0-9]+),([0-9]+)\)").unwrap();
@@ -63,7 +49,7 @@ fn perform_calc(split_input: &str) -> i32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::{get_enabled, perform_calc};
+    use crate::get_enabled;
 
     #[test]
     fn test_example() {
@@ -85,5 +71,29 @@ mod tests {
         let result = 252 * 355 + 386 * 736;
 
         assert_eq!(get_enabled(s), result);
+    }
+
+    #[test]
+    fn test_simplified_cases() {
+        let qs = [
+            "mul(252,355)don't()mul(670,441)don't()mul(591,136)mul(338,232)do()mul(386,736)do()mul(386,736)",
+            "don't()mul(252,355)don't()mul(670,441)don't()mul(591,136)mul(338,232)do()mul(386,736)do()mul(386,736)",
+            "do()mul(252,355)don't()mul(670,441)don't()mul(591,136)mul(338,232)don't()do()mul(386,736)do()mul(386,736)",
+            "don't()mul(252,355)do()mul(670,441)don't()mul(591,136)do()mul(338,232)don't()mul(386,736)do()mul(386,736)",
+            "do()mul(670,441)don't()mul(591,136)do()mul(338,232)don't()mul(386,736)do()mul(386,736)",
+            "do()don't()mul(670,441)don't()mul(591,136)do()mul(338,232)don't()mul(386,736)do()mul(386,736)",
+        ];
+        let results = [
+            252 * 355 + 386 * 736 + 386 * 736,
+            386 * 736 + 386 * 736,
+            252 * 355 + 386 * 736 + 386 * 736,
+            670 * 441 + 338 * 232 + 386 * 736,
+            670 * 441 + 338 * 232 + 386 * 736,
+            338 * 232 + 386 * 736,
+        ];
+
+        for (i, s) in qs.iter().enumerate() {
+            assert_eq!(get_enabled(s), results[i]);
+        }
     }
 }
