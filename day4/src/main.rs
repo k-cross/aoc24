@@ -5,8 +5,47 @@ fn main() {
     let content =
         fs::read_to_string("/Users/ken/src/aoc24/day4/src/input.txt").expect("file didn't open");
 
-    let result = perform_calc(content);
+    let result = part_two(content);
     println!("result: {}", result);
+}
+
+fn part_two(input: String) -> i32 {
+    let grid = input
+        .lines()
+        .map(|line| line.chars().collect())
+        .collect::<Vec<Vec<char>>>();
+
+    let (m, n): (usize, usize) = (grid.len(), grid[0].len());
+    let mut count = 0;
+
+    //don't bother checking on bounds since it is impossible to match
+    for i in 1..m - 1 {
+        for j in 1..n - 1 {
+            if grid[i][j] == 'A' && check_x(&grid, &i, &j) {
+                count += 1
+            }
+        }
+    }
+
+    count
+}
+
+fn check_x(grid: &Vec<Vec<char>>, row: &usize, col: &usize) -> bool {
+    // pos pos, pos neg, neg pos, neg neg
+    let axis = (
+        grid[row + 1][col + 1],
+        grid[row + 1][col - 1],
+        grid[row - 1][col + 1],
+        grid[row - 1][col - 1],
+    );
+
+    match axis {
+        ('M', 'M', 'S', 'S') => return true,
+        ('S', 'S', 'M', 'M') => return true,
+        ('M', 'S', 'M', 'S') => return true,
+        ('S', 'M', 'S', 'M') => return true,
+        _ => return false,
+    }
 }
 
 fn perform_calc(input: String) -> i32 {
@@ -140,7 +179,7 @@ fn check_vertical(
 
 #[cfg(test)]
 mod tests {
-    use crate::perform_calc;
+    use crate::{part_two, perform_calc};
 
     #[test]
     fn test_result() {
@@ -168,5 +207,33 @@ MXMXAXMASX
 "
         .to_string();
         assert_eq!(perform_calc(s), 18);
+    }
+
+    #[test]
+    fn test_part_two() {
+        //   0 1 2 3 4 5 6 7 8 9
+        //0: M M M S X X M A S M
+        //1: M S A M X M S M S A
+        //2: A M X S X M A A M M
+        //3: M S A M A S M S M X
+        //4: X M A S A M X A M M
+        //5: X X A M M X X A M A
+        //6: S M S M S A S X S S
+        //7: S A X A M A S A A A
+        //8: M A M M M X M M M M
+        //9: M X M X A X M A S X
+        let s = "MMMSXXMASM
+MSAMXMSMSA
+AMXSXMAAMM
+MSAMASMSMX
+XMASAMXAMM
+XXAMMXXAMA
+SMSMSASXSS
+SAXAMASAAA
+MAMMMXMMMM
+MXMXAXMASX
+"
+        .to_string();
+        assert_eq!(part_two(s), 9);
     }
 }
